@@ -1,0 +1,3 @@
+language: objective-c
+before_install: brew install xctester
+script: make test
