@@ -28,4 +28,12 @@ class ChoreTests : XCTestCase {
 
         XCTAssertEqual(result.result, 0)
     }
+
+    func testFailsWithNonExistingCommand() {
+        let result = §"/bin/yolo"
+
+        XCTAssertEqual(result.result, 255)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "/bin/yolo: launch path not accessible")
+    }
 }
