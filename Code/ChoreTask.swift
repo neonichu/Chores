@@ -12,6 +12,10 @@ private func chore_task(command: String, arguments: [String]) -> ChoreResult {
     task.launchPath = command
     task.arguments = arguments
 
+    if !(task.launchPath as NSString).absolutePath {
+        task.launchPath = (chore_task("/usr/bin/which", [task.launchPath])).stdout
+    }
+
     if !NSFileManager.defaultManager().fileExistsAtPath(task.launchPath) {
         return (255, "", String(format: "%@: launch path not accessible", task.launchPath))
     }
