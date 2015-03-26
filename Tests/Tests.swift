@@ -2,7 +2,7 @@ import XCTest
 
 class ChoreTests : XCTestCase {
     func testStandardOutput() {
-        let result = §["/bin/echo", "#yolo"]
+        let result = >["/bin/echo", "#yolo"]
 
         XCTAssertEqual(result.result, 0)
         XCTAssertEqual(result.stdout, "#yolo")
@@ -10,7 +10,7 @@ class ChoreTests : XCTestCase {
     }
 
     func testStandardError() {
-        let result = §["/bin/sh", "-c", "echo yolo >&2"]
+        let result = >["/bin/sh", "-c", "echo yolo >&2"]
 
         XCTAssertEqual(result.result, 0)
         XCTAssertEqual(result.stdout, "")
@@ -18,19 +18,19 @@ class ChoreTests : XCTestCase {
     }
 
     func testResult() {
-        let result = §["/usr/bin/false"]
+        let result = >["/usr/bin/false"]
 
         XCTAssertEqual(result.result, 1)
     }
 
     func testResolvesCommandPathsIfNotAbsolute() {
-        let result = §"true"
+        let result = >"true"
 
         XCTAssertEqual(result.result, 0)
     }
 
     func testFailsWithNonExistingCommand() {
-        let result = §"/bin/yolo"
+        let result = >"/bin/yolo"
 
         XCTAssertEqual(result.result, 255)
         XCTAssertEqual(result.stdout, "")

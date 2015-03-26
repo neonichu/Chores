@@ -4,10 +4,10 @@ A library for simplifying task execution in Swift.
 
 ## Usage
 
-Use the `§` custom operator to execute commands:
+Use the `>` custom operator to execute commands:
 
 ```swift
-let result = §"true"
+let result = >"true"
 println(result.result) // 0
 println(result.stdout) // ""
 ```

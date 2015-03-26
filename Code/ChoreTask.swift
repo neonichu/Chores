@@ -37,13 +37,13 @@ private func chore_task(command: String, arguments: [String]) -> ChoreResult {
     return (task.terminationStatus, stdout, stderr)
 }
 
-prefix operator § {}
+prefix operator > {}
 
-public prefix func § (command: String) -> ChoreResult {
+public prefix func > (command: String) -> ChoreResult {
     return chore_task(command, [String]())
 }
 
-public prefix func § (command: [String]) -> ChoreResult {
+public prefix func > (command: [String]) -> ChoreResult {
     switch command.count {
         case 0:
             return (0, "", "")
