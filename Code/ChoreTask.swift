@@ -6,7 +6,7 @@ private func string_trim(string: NSString!) -> String {
     return string.stringByTrimmingCharactersInSet(.whitespaceAndNewlineCharacterSet()) ?? ""
 }
 
-private func chore_task(command: String, arguments: [String]) -> ChoreResult {
+private func chore_task(command: String, _ arguments: [String] = [String]()) -> ChoreResult {
     let task = NSTask()
 
     task.launchPath = command
@@ -40,7 +40,7 @@ private func chore_task(command: String, arguments: [String]) -> ChoreResult {
 prefix operator > {}
 
 public prefix func > (command: String) -> ChoreResult {
-    return chore_task(command, [String]())
+    return chore_task(command)
 }
 
 public prefix func > (command: [String]) -> ChoreResult {
@@ -48,7 +48,7 @@ public prefix func > (command: [String]) -> ChoreResult {
         case 0:
             return (0, "", "")
         case 1:
-            return chore_task(command[0], [String]())
+            return chore_task(command[0])
         default:
             break
     }
