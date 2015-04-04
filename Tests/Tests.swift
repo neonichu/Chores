@@ -52,4 +52,26 @@ class ChoreTests : XCTestCase {
         XCTAssertEqual(result.stdout, "EATME.md")
         XCTAssertEqual(result.stderr, "")
     }
+
+    func testPipeFail() {
+        let result = >["ls", "yolo"]|"cat"
+
+        XCTAssertEqual(result.result, 1)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "ls: yolo: No such file or directory")
+    }
+
+    func testPipeToClosure() {
+        let result = >["ls", "LICENSE"]|{ String(count($0)) }
+
+        XCTAssertEqual(result.stdout, "7")
+    }
+
+    func testPipeToClosureFail() {
+        let result = >["ls", "yolo"]|{ String(count($0)) }
+
+        XCTAssertEqual(result.result, 1)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "ls: yolo: No such file or directory")
+    }
 }

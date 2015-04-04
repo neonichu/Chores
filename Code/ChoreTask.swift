@@ -81,3 +81,11 @@ public func | (left: ChoreResult, right: [String]) -> ChoreResult {
     let arguments = right.count >= 2 ? Array(right[1..<right.count]) : [String]()
     return chore_task(right[0], arguments, stdin: left.stdout)
 }
+
+public func | (left: ChoreResult, right: ((String) -> String)) -> ChoreResult {
+    if left.result != 0 {
+        return left
+    }
+
+    return (0, right(left.stdout), "")
+}
