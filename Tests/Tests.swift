@@ -74,4 +74,20 @@ class ChoreTests : XCTestCase {
         XCTAssertEqual(result.stdout, "")
         XCTAssertEqual(result.stderr, "ls: yolo: No such file or directory")
     }
+
+    func testPipeClosureIntoCommand() {
+        let result = { "yolo" }|"cat"
+
+        XCTAssertEqual(result.result, 0)
+        XCTAssertEqual(result.stdout, "yolo")
+        XCTAssertEqual(result.stderr, "")
+    }
+
+    func testPipeStringIntoCommand() {
+        let result = "yolo"|"cat"
+
+        XCTAssertEqual(result.result, 0)
+        XCTAssertEqual(result.stdout, "yolo")
+        XCTAssertEqual(result.stderr, "")
+    }
 }

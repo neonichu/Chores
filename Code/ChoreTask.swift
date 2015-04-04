@@ -89,3 +89,19 @@ public func | (left: ChoreResult, right: ((String) -> String)) -> ChoreResult {
 
     return (0, right(left.stdout), "")
 }
+
+public func | (left: (() -> String), right: String) -> ChoreResult {
+    return (0, left(), "")|right
+}
+
+public func | (left: (() -> String), right: [String]) -> ChoreResult {
+    return (0, left(), "")|right
+}
+
+public func | (left: String, right: String) -> ChoreResult {
+    return (0, left, "")|right
+}
+
+public func | (left: String, right: [String]) -> ChoreResult {
+    return (0, left, "")|right
+}
