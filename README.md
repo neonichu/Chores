@@ -1,5 +1,10 @@
 # Chore
 
+[![Version](https://img.shields.io/cocoapods/v/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
+[![License](https://img.shields.io/cocoapods/l/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
+[![Platform](https://img.shields.io/cocoapods/p/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
+[![Build Status](http://img.shields.io/travis/neonichu/Chores.svg?style=flat)](https://travis-ci.org/neonichu/Chores)
+
 A library for simplifying task execution in Swift.
 
 ## Usage
