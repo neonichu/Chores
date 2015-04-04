@@ -36,6 +36,7 @@ println(result.stdout) // "9"
 The tests require [xctester][1], install it via [Homebrew][2]:
 
 ```
+$ brew tap neonichu/formulae
 $ brew install xctester
 ```
 
