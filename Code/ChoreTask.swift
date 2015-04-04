@@ -6,7 +6,7 @@ private func string_trim(string: NSString!) -> String {
     return string.stringByTrimmingCharactersInSet(.whitespaceAndNewlineCharacterSet()) ?? ""
 }
 
-private func chore_task(command: String, _ arguments: [String] = [String]()) -> ChoreResult {
+private func chore_task(command: String, _ arguments: [String] = [String](), stdin: String = "") -> ChoreResult {
     let task = NSTask()
 
     task.launchPath = command
@@ -18,6 +18,17 @@ private func chore_task(command: String, _ arguments: [String] = [String]()) -> 
 
     if !NSFileManager.defaultManager().fileExistsAtPath(task.launchPath) {
         return (255, "", String(format: "%@: launch path not accessible", task.launchPath))
+    }
+
+    if count(stdin) > 0 {
+        let stdinPipe = NSPipe()
+        task.standardInput = stdinPipe
+        let stdinHandle = stdinPipe.fileHandleForWriting
+
+        if let data = stdin.dataUsingEncoding(NSUTF8StringEncoding) {
+            stdinHandle.writeData(data)
+            stdinHandle.closeFile()
+        }
     }
 
     let stderrPipe = NSPipe()
@@ -54,4 +65,19 @@ public prefix func > (command: [String]) -> ChoreResult {
     }
 
     return chore_task(command[0], Array(command[1..<command.count]))
+}
+
+infix operator | {}
+
+public func | (left: ChoreResult, right: String) -> ChoreResult {
+    return left|[right]
+}
+
+public func | (left: ChoreResult, right: [String]) -> ChoreResult {
+    if left.result != 0 {
+        return left
+    }
+
+    let arguments = right.count >= 2 ? Array(right[1..<right.count]) : [String]()
+    return chore_task(right[0], arguments, stdin: left.stdout)
 }
