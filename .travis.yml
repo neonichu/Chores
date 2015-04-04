@@ -1,3 +1,5 @@
 language: objective-c
-before_install: brew install xctester
+before_install:
+- brew tap neonichu/formulae
+- brew install xctester
 script: make test
