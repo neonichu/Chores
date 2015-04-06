@@ -1,5 +1,6 @@
 import Foundation
 
+/// The result of a task execution
 public typealias ChoreResult = (result: Int32, stdout: String, stderr: String)
 
 private func string_trim(string: NSString!) -> String {
@@ -50,10 +51,22 @@ private func chore_task(command: String, _ arguments: [String] = [String](), std
 
 prefix operator > {}
 
+/**
+Executes a command.
+
+:param: command The command to execute.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public prefix func > (command: String) -> ChoreResult {
     return chore_task(command)
 }
 
+/**
+Executes a command with arguments.
+
+:param: command The command to execute and its arguments.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public prefix func > (command: [String]) -> ChoreResult {
     switch command.count {
         case 0:
@@ -69,10 +82,24 @@ public prefix func > (command: [String]) -> ChoreResult {
 
 infix operator | {}
 
+/**
+Executes a command with standard input from another command.
+
+:param: left The result of a previous command.
+:param: right The command to execute.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: ChoreResult, right: String) -> ChoreResult {
     return left|[right]
 }
 
+/**
+Executes a command with standard input from another command.
+
+:param: left The result of a previous command.
+:param: right The command to execute and its arguments.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: ChoreResult, right: [String]) -> ChoreResult {
     if left.result != 0 {
         return left
@@ -82,6 +109,13 @@ public func | (left: ChoreResult, right: [String]) -> ChoreResult {
     return chore_task(right[0], arguments, stdin: left.stdout)
 }
 
+/**
+Executes a closure with input from a previous command.
+
+:param: left The result of a previous command.
+:param: right The closure to execute.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: ChoreResult, right: ((String) -> String)) -> ChoreResult {
     if left.result != 0 {
         return left
@@ -90,18 +124,46 @@ public func | (left: ChoreResult, right: ((String) -> String)) -> ChoreResult {
     return (0, right(left.stdout), "")
 }
 
+/**
+Executes a command with input from a closure.
+
+:param: left The closure to execute.
+:param: right The command to execute.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: (() -> String), right: String) -> ChoreResult {
     return (0, left(), "")|right
 }
 
+/**
+Executes a command with input from a closure.
+
+:param: left The closure to execute.
+:param: right The command to execute and its arguments.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: (() -> String), right: [String]) -> ChoreResult {
     return (0, left(), "")|right
 }
 
+/**
+Executes a command with input from a string.
+
+:param: left The string to use a stdin.
+:param: right The command to execute.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: String, right: String) -> ChoreResult {
     return (0, left, "")|right
 }
 
+/**
+Executes a command with input from a string.
+
+:param: left The string to use a stdin.
+:param: right The command to execute and its arguments.
+:returns: A tuple containing the exit code, stdout and stderr output.
+*/
 public func | (left: String, right: [String]) -> ChoreResult {
     return (0, left, "")|right
 }
