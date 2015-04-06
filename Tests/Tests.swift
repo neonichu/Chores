@@ -1,5 +1,8 @@
 import XCTest
 
+/* redefine from /usr/include/sys/pipe.h */
+let BIG_PIPE_SIZE : Int = 64*1024
+
 class ChoreTests : XCTestCase {
     func testStandardOutput() {
         let result = >["/bin/echo", "#yolo"]
@@ -30,11 +33,11 @@ class ChoreTests : XCTestCase {
     }
 
     func testFailsWithNonExistingCommand() {
-        let result = >"/bin/yolo"
+        let result = >"/dev/null/yolo"
 
         XCTAssertEqual(result.result, 255)
         XCTAssertEqual(result.stdout, "")
-        XCTAssertEqual(result.stderr, "/bin/yolo: launch path not accessible")
+        XCTAssertEqual(result.stderr, "/dev/null/yolo: launch path not accessible")
     }
 
     func testSimplePipe() {
@@ -88,6 +91,42 @@ class ChoreTests : XCTestCase {
 
         XCTAssertEqual(result.result, 0)
         XCTAssertEqual(result.stdout, "yolo")
+        XCTAssertEqual(result.stderr, "")
+    }
+
+    func testExecuteDirectory() {
+        let result = >"/"
+
+        XCTAssertEqual(result.result, 23)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "THIS TEST SHOULD REALLY FAIL")
+    }
+
+    func testExecuteNonExecutableFile() {
+        let result = >"/etc/passwd"
+
+        XCTAssertEqual(result.result, 23)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "THIS TEST SHOULD REALLY FAIL")
+    }
+
+    func testCanHaveInputLongerThanPipeSize() {
+        let length = BIG_PIPE_SIZE + 1
+        let str : String = reduce(map(1...length, { _ in "x" }), "", +)
+        let result = str|["/usr/bin/wc", "-c"]
+
+        XCTAssertEqual(result.result, 0)
+        XCTAssertEqual(result.stdout, "\(length)")
+        XCTAssertEqual(result.stderr, "")
+    }
+
+    func testCanHaveOutputLongerThanPipeSize() {
+        let length = BIG_PIPE_SIZE + 1
+        let str : String = reduce(map(1...length, { _ in "x" }), "", +)
+        let result = str|"/bin/cat"
+
+        XCTAssertEqual(result.result, 0)
+        XCTAssertEqual(result.stdout, str)
         XCTAssertEqual(result.stderr, "")
     }
 }
