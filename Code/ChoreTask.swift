@@ -17,8 +17,18 @@ private func chore_task(command: String, _ arguments: [String] = [String](), std
         task.launchPath = (chore_task("/usr/bin/which", [task.launchPath])).stdout
     }
 
-    if !NSFileManager.defaultManager().fileExistsAtPath(task.launchPath) {
+    var isDirectory: ObjCBool = false
+
+    if !NSFileManager.defaultManager().fileExistsAtPath(task.launchPath, isDirectory: &isDirectory) {
         return (255, "", String(format: "%@: launch path not accessible", task.launchPath))
+    }
+
+    if (isDirectory) {
+        return (255, "", String(format: "%@: launch path is a directory", task.launchPath))
+    }
+
+    if !NSFileManager.defaultManager().isExecutableFileAtPath(task.launchPath) {
+        return (255, "", String(format: "%@: launch path not executable", task.launchPath))
     }
 
     if count(stdin) > 0 {

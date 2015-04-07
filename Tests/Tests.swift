@@ -37,6 +37,22 @@ class ChoreTests : XCTestCase {
         XCTAssertEqual(result.stderr, "/bin/yolo: launch path not accessible")
     }
 
+    func testFailsToExecuteDirectory() {
+        let result = >"/"
+
+        XCTAssertEqual(result.result, 255)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "/: launch path is a directory")
+    }
+
+    func testFailsToExecuteNonExecutableFile() {
+        let result = >"/etc/passwd"
+
+        XCTAssertEqual(result.result, 255)
+        XCTAssertEqual(result.stdout, "")
+        XCTAssertEqual(result.stderr, "/etc/passwd: launch path not executable")
+    }
+
     func testSimplePipe() {
         let result = >"ls"|"cat"
 
