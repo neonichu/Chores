@@ -57,7 +57,7 @@ class ChoreTests : XCTestCase {
         let result = >"ls"|"cat"
 
         XCTAssertEqual(result.result, 0)
-        XCTAssertTrue(count(result.stdout) > 0)
+        XCTAssertTrue(result.stdout.characters.count > 0)
         XCTAssertEqual(result.stderr, "")
     }
 
@@ -78,13 +78,13 @@ class ChoreTests : XCTestCase {
     }
 
     func testPipeToClosure() {
-        let result = >["ls", "LICENSE"]|{ String(count($0)) }
+        let result = >["ls", "LICENSE"]|{ String($0.characters.count) }
 
         XCTAssertEqual(result.stdout, "7")
     }
 
     func testPipeToClosureFail() {
-        let result = >["ls", "yolo"]|{ String(count($0)) }
+        let result = >["ls", "yolo"]|{ String($0.characters.count) }
 
         XCTAssertEqual(result.result, 1)
         XCTAssertEqual(result.stdout, "")
