@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Chores'
-  s.version      = '0.0.2'
+  s.version      = '0.0.3'
   s.summary      = 'A library for simplifying task execution in Swift.'
   s.homepage     = 'https://github.com/neonichu/Chores'
   s.license      = 'MIT'
