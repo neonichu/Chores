@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	xctester Code/*.swift Tests/*.swift
+	xctester Sources/*.swift Tests/*.swift
