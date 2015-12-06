@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
   s.platform     = :osx, '10.9'
   s.source       = { :git => 'https://github.com/neonichu/Chores.git',
                      :tag => s.version }
-  s.source_files = 'Code'
+  s.source_files = 'Sources'
 end
