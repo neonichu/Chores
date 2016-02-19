@@ -12,6 +12,11 @@ private func chore_task(command: String, _ arguments: [String] = [String](), std
 
     task.launchPath = command
     task.arguments = arguments
+  
+    var environment = NSProcessInfo.processInfo().environment
+    let path = environment["PATH"]
+    environment["PATH"] = (path != nil) ? "\(path):/usr/local/bin" : "/usr/local/bin"
+    task.environment = environment
 
     if !(task.launchPath! as NSString).absolutePath {
         task.launchPath = (chore_task("/usr/bin/which", [task.launchPath!])).stdout
