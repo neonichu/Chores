@@ -1,5 +1,6 @@
 # Chores
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 [![Version](https://img.shields.io/cocoapods/v/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
 [![License](https://img.shields.io/cocoapods/l/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
 [![Platform](https://img.shields.io/cocoapods/p/Chores.svg?style=flat)](http://cocoadocs.org/docsets/Chores)
